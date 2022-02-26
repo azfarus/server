@@ -51,7 +51,7 @@ SOCKET serverCreate()
 
 void sendFaculty(SOCKET sock)
 {
-	FILE* fp = fopen("G:\\Project Works\\Socket project\\utility codes\\FACULTY.txt", "r+");
+	FILE* fp = fopen(facultylist, "r+");
 	info faculty;
 	fseek(fp, 0, 0);
 
