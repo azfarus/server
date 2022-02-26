@@ -31,7 +31,7 @@ void main()
 
 
 
-	info siuuu;
+	
 
 	char buf[4096];
 
@@ -59,12 +59,12 @@ void main()
 			
 		}
 
-		if (!strncmp(buf, "NAMDAO", 6))
+		if (!strncmp(buf, "faculty", 6))
 		{
 			//send(clientSocket,(char *)&siuuu,sizeof(siuuu), 0);
 			sendFaculty(clientSocket);
 		}
-		else send(clientSocket, buf, bytesReceived + 1, 0);
+		else send(clientSocket, 0 , 0, 0);
 
 	}
 

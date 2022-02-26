@@ -14,7 +14,7 @@ SOCKET serverCreate()
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
 	hint.sin_port = htons(54000);
-	hint.sin_addr.S_un.S_addr = inet_addr("192.168.0.106"); // Could also use inet_pton ....
+	hint.sin_addr.S_un.S_addr = INADDR_ANY; // Could also use inet_pton ....
 
 	bind(listening, (sockaddr*)&hint, sizeof(hint));
 
@@ -53,7 +53,7 @@ void sendFaculty(SOCKET sock)
 {
 	FILE* fp = fopen("G:\\Project Works\\Socket project\\utility codes\\FACULTY.txt", "r+");
 	info faculty;
-	fseek(fp, 0, 0);//ggggggggggggggggggg
+	fseek(fp, 0, 0);
 
 	while (!feof(fp))
 	{
