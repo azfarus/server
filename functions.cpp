@@ -53,7 +53,7 @@ void sendFaculty(SOCKET sock)
 {
 	FILE* fp = fopen("G:\\Project Works\\Socket project\\utility codes\\FACULTY.txt", "r+");
 	info faculty;
-	fseek(fp, 0, 0);
+	fseek(fp, 0, 0);//ggggggggggggggggggg
 
 	while (!feof(fp))
 	{
