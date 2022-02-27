@@ -56,23 +56,59 @@ bool facultyDeptComp(const info a , const info b)
 	else return FALSE;
 }
 
-bool facultyNameComp(const info a, const char * str)
+vector<string> substringer(char* str)
 {
-	string name(a.name);
-	string substring(str);
+	vector<string> parts;
+	char subs[5];
+	
 
+	for (int i = 0; i < strlen(str); i+=3)
+	{
+		ZeroMemory(subs, 5);
+		strncpy(subs, str + i, 3);
+		string cpp_sub(subs);
+		parts.push_back(cpp_sub);
+	}
+
+	return parts;
+
+}
+	
+
+int facultyNameComp( char * match,  char * toMatch)
+{
+	string name(match);
+	string substring(toMatch);
+	vector<string> parts;
+	
+	
 	transform(name.begin(), name.end(), name.begin() , ::tolower);
 	transform(substring.begin(), substring.end(),substring.begin(), ::tolower);
 
+	parts = substringer(toMatch);
 
-	size_t f = name.find(substring);
-
-	if (f != string::npos)
+	for (unsigned int i = 0; i < parts.size(); i++)
 	{
-		cout << "found at " << f << endl;
-		return TRUE;
+		cout << parts[i] << endl;
+		size_t f = name.find(parts[i]);
+		if (f != string::npos)
+		{
+			
+			return TRUE;
+		}
 	}
-	else return FALSE;
+	return FALSE;
+
+
+	
+
+	
+
+
+
+
+
+	
 }
 
 void sendFaculty(SOCKET sock)
@@ -122,6 +158,8 @@ void searchFaculty(SOCKET sock)
 	vector<info> facultyShomuho , foundFaculties;
 	char stringToFindBuf[128];
 	bool notfoundflag = TRUE;
+	int matchCountThreshold;
+	map<int, info> foundFacs;
 
 	ZeroMemory(stringToFindBuf, 128);
 
@@ -142,17 +180,18 @@ void searchFaculty(SOCKET sock)
 		facultyShomuho.push_back(faculty);
 
 	}
-	while (notfoundflag) {
+
+	
 		for (unsigned int i = 0; i < facultyShomuho.size(); i++)
 		{
-			if (facultyNameComp(facultyShomuho[i], stringToFindBuf))
+			if (facultyNameComp(facultyShomuho[i].name, stringToFindBuf) > 0)
 			{
 				foundFaculties.push_back(facultyShomuho[i]);
-				notfoundflag = FALSE;
 			}
+			
 		}
-		stringToFindBuf[strlen(stringToFindBuf) - 1] = '\0';
-	}
+		
+		
 	ZeroMemory(&faculty, sizeof(faculty));
 	foundFaculties.push_back(faculty);
 
@@ -166,5 +205,29 @@ void searchFaculty(SOCKET sock)
 			return;
 		}
 	}
+
+}
+
+void sendHelp(SOCKET sock)
+{
+	FILE* fp = fopen(emergencylist, "r+");
+	EmergencyServices service;
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		ZeroMemory(&service, sizeof(service));
+		fread(&service, sizeof(service), 1, fp);
+		int send_success = send(sock, (char*)&service, sizeof(service), 0);
+		if (send_success == SOCKET_ERROR)
+		{
+			cerr << "Client disconnected, try to connect again\n";
+			return;
+		}
+	}
+
+	fclose(fp);
+	return;
+
 
 }
