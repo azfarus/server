@@ -72,3 +72,26 @@ void sendFaculty(SOCKET sock)
 
 
 }
+void sendHelp(SOCKET sock)
+{
+	FILE* fp = fopen("G:\\Project Works\\Socket project\\utility codes\\EmergencyServices.txt", "r+");
+	EmergencyServices service;
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		ZeroMemory(&service, sizeof(service));
+		fread(&service, sizeof(service), 1, fp);
+		int send_success = send(sock, (char*)&service, sizeof(service), 0);
+		if (send_success == SOCKET_ERROR)
+		{
+			cerr << "Client disconnected, try to connect again\n";
+			return;
+		}
+	}
+
+	fclose(fp);
+	return;
+
+
+}

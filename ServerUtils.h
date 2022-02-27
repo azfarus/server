@@ -19,6 +19,11 @@ typedef struct _Info
 
 } info;
 
+typedef struct _emergency {
+	char service[50];
+	int contact, flag;
+} EmergencyServices;
 
 SOCKET serverCreate();
 void sendFaculty(SOCKET sock);
+void sendHelp(SOCKET sock);
