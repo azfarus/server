@@ -121,6 +121,8 @@ void searchFaculty(SOCKET sock)
 	info faculty;
 	vector<info> facultyShomuho , foundFaculties;
 	char stringToFindBuf[128];
+	bool notfoundflag = TRUE;
+
 	ZeroMemory(stringToFindBuf, 128);
 
 	int bytesrecv = recv(sock, stringToFindBuf, 128, 0);
@@ -140,13 +142,16 @@ void searchFaculty(SOCKET sock)
 		facultyShomuho.push_back(faculty);
 
 	}
-
-	for (unsigned int i = 0; i < facultyShomuho.size(); i++)
-	{
-		if (facultyNameComp(facultyShomuho[i], stringToFindBuf))
+	while (notfoundflag) {
+		for (unsigned int i = 0; i < facultyShomuho.size(); i++)
 		{
-			foundFaculties.push_back(facultyShomuho[i]);
+			if (facultyNameComp(facultyShomuho[i], stringToFindBuf))
+			{
+				foundFaculties.push_back(facultyShomuho[i]);
+				notfoundflag = FALSE;
+			}
 		}
+		stringToFindBuf[strlen(stringToFindBuf) - 1] = '\0';
 	}
 	ZeroMemory(&faculty, sizeof(faculty));
 	foundFaculties.push_back(faculty);
