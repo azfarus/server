@@ -62,10 +62,10 @@ vector<string> substringer(char* str)
 	char subs[5];
 	
 
-	for (int i = 0; i < strlen(str); i+=3)
+	for (int i = 0; i < strlen(str)-1; i++)
 	{
 		ZeroMemory(subs, 5);
-		strncpy(subs, str + i, 3);
+		strncpy(subs, str + i, 2);
 		string cpp_sub(subs);
 		parts.push_back(cpp_sub);
 	}
