@@ -49,10 +49,29 @@ SOCKET serverCreate()
 
 }
 
-bool facultyComp(const info a , const info b)
+bool facultyDeptComp(const info a , const info b)
 {
 	int c = strcmp(a.department, b.department);
 	if (c < 0) return TRUE;
+	else return FALSE;
+}
+
+bool facultyNameComp(const info a, const char * str)
+{
+	string name(a.name);
+	string substring(str);
+
+	transform(name.begin(), name.end(), name.begin() , ::tolower);
+	transform(substring.begin(), substring.end(),substring.begin(), ::tolower);
+
+
+	size_t f = name.find(substring);
+
+	if (f != string::npos)
+	{
+		cout << "found at " << f << endl;
+		return TRUE;
+	}
 	else return FALSE;
 }
 
@@ -73,7 +92,7 @@ void sendFaculty(SOCKET sock)
 	}
 
 	
-	std::sort(facultyShomuho.begin(), facultyShomuho.end(), facultyComp );
+	std::sort(facultyShomuho.begin(), facultyShomuho.end(), facultyDeptComp );
 
 	ZeroMemory(&faculty, sizeof(faculty));
 	facultyShomuho.push_back(faculty);
@@ -93,5 +112,54 @@ void sendFaculty(SOCKET sock)
 	fclose(fp);
 	return;
 
+
+}
+
+void searchFaculty(SOCKET sock)
+{
+	FILE* fp = fopen(facultylist, "r+");
+	info faculty;
+	vector<info> facultyShomuho , foundFaculties;
+	char stringToFindBuf[128];
+	ZeroMemory(stringToFindBuf, 128);
+
+	int bytesrecv = recv(sock, stringToFindBuf, 128, 0);
+	if (bytesrecv == 0)
+	{
+		cerr << "Client disconnected";
+		return;
+	}
+
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		ZeroMemory(&faculty, sizeof(faculty));
+		fread(&faculty, sizeof(faculty), 1, fp);
+		if (faculty.phone_no == 0) break;
+		facultyShomuho.push_back(faculty);
+
+	}
+
+	for (unsigned int i = 0; i < facultyShomuho.size(); i++)
+	{
+		if (facultyNameComp(facultyShomuho[i], stringToFindBuf))
+		{
+			foundFaculties.push_back(facultyShomuho[i]);
+		}
+	}
+	ZeroMemory(&faculty, sizeof(faculty));
+	foundFaculties.push_back(faculty);
+
+	cout << "Faculties shown :" << foundFaculties.size() << endl;
+	for (unsigned int i = 0; i < foundFaculties.size(); i++)
+	{
+		int sendbytes = send(sock, (char*)(&foundFaculties[i]), sizeof(faculty), 0);
+		if (sendbytes == 0)
+		{
+			cerr << "Send failed . Client disconnected\n";
+			return;
+		}
+	}
 
 }

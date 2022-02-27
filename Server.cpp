@@ -61,8 +61,11 @@ void main()
 
 		if (!strncmp(buf, "faculty", 6))
 		{
-			//send(clientSocket,(char *)&siuuu,sizeof(siuuu), 0);
 			sendFaculty(clientSocket);
+		}
+		else if (!strncmp(buf, "searchfaculty", 13))
+		{
+			searchFaculty(clientSocket);
 		}
 		else send(clientSocket, 0 , 0, 0);
 

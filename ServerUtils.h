@@ -26,4 +26,5 @@ typedef struct _Info
 
 SOCKET serverCreate();
 void sendFaculty(SOCKET sock);
-bool facultyComp(info a, info b);
+bool facultyDeptComp(info a, info b);
+void searchFaculty(SOCKET sock);
