@@ -2,6 +2,9 @@
 #include <iostream>
 #include <WS2tcpip.h>
 #include <string>
+#include <vector>
+#include <algorithm>
+
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
@@ -23,3 +26,4 @@ typedef struct _Info
 
 SOCKET serverCreate();
 void sendFaculty(SOCKET sock);
+bool facultyComp(info a, info b);

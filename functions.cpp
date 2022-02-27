@@ -49,20 +49,43 @@ SOCKET serverCreate()
 
 }
 
+bool facultyComp(const info a , const info b)
+{
+	int c = strcmp(a.department, b.department);
+	if (c < 0) return TRUE;
+	else return FALSE;
+}
+
 void sendFaculty(SOCKET sock)
 {
 	FILE* fp = fopen(facultylist, "r+");
 	info faculty;
+	vector<info> facultyShomuho;
 	fseek(fp, 0, 0);
 
 	while (!feof(fp))
 	{
 		ZeroMemory(&faculty, sizeof(faculty));
 		fread(&faculty, sizeof(faculty), 1, fp);
-		int send_success = send(sock, (char*)&faculty, sizeof(faculty), 0);
-		if (send_success == SOCKET_ERROR)
+		if (faculty.phone_no == 0) break;
+		facultyShomuho.push_back(faculty);
+		
+	}
+
+	
+	std::sort(facultyShomuho.begin(), facultyShomuho.end(), facultyComp );
+
+	ZeroMemory(&faculty, sizeof(faculty));
+	facultyShomuho.push_back(faculty);
+
+
+	cout << "Faculties shown :" << facultyShomuho.size() << endl;
+	for (unsigned int i = 0; i < facultyShomuho.size(); i++)
+	{
+		int sendbytes = send(sock, (char*)( &facultyShomuho[i]), sizeof(faculty), 0);
+		if (sendbytes == 0)
 		{
-			cerr << "Client disconnected, try to connect again\n";
+			cerr << "Send failed . Client disconnected\n";
 			return;
 		}
 	}
