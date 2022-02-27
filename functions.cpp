@@ -89,7 +89,7 @@ int facultyNameComp( char * match,  char * toMatch)
 
 	for (unsigned int i = 0; i < parts.size(); i++)
 	{
-		cout << parts[i] << endl;
+		//cout << parts[i] << endl;
 		size_t f = name.find(parts[i]);
 		if (f != string::npos)
 		{
