@@ -9,8 +9,8 @@
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-#define facultylist "G:\\Project Works\\Socket project\\utility codes\\FACULTY.txt" 
-#define emergencylist "G:\\Project Works\\Socket project\\utility codes\\EmergencyServices.txt"
+#define facultylist "E:\\ProjectDataBase\\FACULTY.txt" 
+#define emergencylist "E:\\ProjectDataBase\\EmergencyServices.txt"
 
 #pragma comment (lib, "ws2_32.lib")
 
