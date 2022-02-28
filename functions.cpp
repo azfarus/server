@@ -3,6 +3,10 @@
 
 SOCKET serverCreate()
 {
+	//Create a sock
+	/*
+		Socket just plugs a port and an IP
+	*/
 	SOCKET listening = socket(AF_INET, SOCK_STREAM, 0);
 	if (listening == INVALID_SOCKET)
 	{
@@ -10,16 +14,21 @@ SOCKET serverCreate()
 		return (SOCKET)-1;
 	}
 
-	// Bind the ip address and port to a socket
-	sockaddr_in hint;
-	hint.sin_family = AF_INET;
-	hint.sin_port = htons(54000);
-	hint.sin_addr.S_un.S_addr = INADDR_ANY; // Could also use inet_pton ....
 
-	bind(listening, (sockaddr*)&hint, sizeof(hint));
+	//Bind the socket to an ip address and port
+	/*
+		Port and ip to a socket
+	*/
+	// Bind the ip address and port to a socket
+	sockaddr_in hint;//Specifies transport and port for the AF_INET
+	hint.sin_family = AF_INET;
+	hint.sin_port = htons(54000);//Host to Network short
+	hint.sin_addr.S_un.S_addr = INADDR_ANY; //ALternative = inet_pton
+
+	bind(listening, (sockaddr*)&hint, sizeof(hint)); //Binding done
 
 	// Tell Winsock the socket is for listening
-	listen(listening, SOMAXCONN);
+	listen(listening, SOMAXCONN); //SOMAXCONN is the maximum number in "listen"
 
 	// Wait for a connection
 	sockaddr_in client;
@@ -39,13 +48,16 @@ SOCKET serverCreate()
 	}
 	else
 	{
-		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);  //Address to string translation
 		cout << host << " connected on port " <<
 			ntohs(client.sin_port) << endl;
 	}
-	closesocket(listening);
-	return clientSocket;
+
 	// Close listening socket
+	closesocket(listening);
+
+
+	return clientSocket;
 
 }
 
@@ -229,6 +241,46 @@ void sendHelp(SOCKET sock)
 		if (send_success == SOCKET_ERROR)
 		{
 			cerr << "Client disconnected, try to connect again\n";
+			return;
+		}
+	}
+
+	fclose(fp);
+	return;
+
+
+}
+void sendFaculty(SOCKET sock)
+{
+	FILE* fp = fopen(emergencylist, "r+");
+	EmergencyServices service;
+	vector<EmergencyServices> serviceShomuho;
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		//Enters all the services as a vector for ease of access
+		ZeroMemory(&service, sizeof(service));
+		fread(&service, sizeof(service), 1, fp);
+		if (service.contact == 0) break;
+		serviceShomuho.push_back(service);
+
+	}
+	//Skipping sort to avoid complications.
+
+	//Entering an empty or zero vector as a terminating condition.
+	ZeroMemory(&service, sizeof(service));
+	serviceShomuho.push_back(service);
+	//Vector manipulation done//
+
+	//Server console outputs:
+	cout << "Emergency Services shown :" << serviceShomuho.size() << endl;
+	for (unsigned int i = 0; i < serviceShomuho.size(); i++)
+	{
+		int sendbytes = send(sock, (char*)(&serviceShomuho[i]), sizeof(service), 0);
+		if (sendbytes == 0)
+		{
+			cerr << "Send failed . Client disconnected\n";
 			return;
 		}
 	}

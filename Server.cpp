@@ -1,9 +1,11 @@
 #include <iostream>
-#include <WS2tcpip.h>
+#include <WS2tcpip.h> //Contains definitions introduced in winsock 2 and functions to receive IPs
+					 //Also access network sockets
+
 #include <string>
 #include "ServerUtils.h"
 
-#pragma comment (lib, "ws2_32.lib")
+#pragma comment (lib, "ws2_32.lib") //Linking libraries
 
 using namespace std;
 
@@ -13,12 +15,12 @@ using namespace std;
 
 void main()
 {
-	// Initialze winsock
-	WSADATA wsData;
-	WORD ver = MAKEWORD(2, 2);
-
-	int wsOk = WSAStartup(ver, &wsData);
-	if (wsOk != 0)
+	//initialize Winsock
+	WSADATA wsData; //Contains information about the windows sockets implementation
+	WORD ver = MAKEWORD(2, 2); //The MAKEWORD(2,2) parameter of WSAStartup makes a request for
+							   //version 2.2 of Winsock on the system, and sets the passed version as the highest version of Windows Sockets support that the caller can use
+	int wsok = WSAStartup(ver, &wsData); //allows an application or DLL to specify the version of Windows Sockets required and retrieve details of the specific Windows Sockets implementation
+	if (wsok != 0)
 	{
 		cerr << "Can't Initialize winsock! Quitting" << endl;
 		return;
@@ -32,7 +34,7 @@ void main()
 
 
 	
-
+	//Features handling loop//
 	char buf[4096];
 
 	while (true)
@@ -66,6 +68,10 @@ void main()
 		else if (!strncmp(buf, "searchfaculty", 13))
 		{
 			searchFaculty(clientSocket);
+		}
+		else if (!strncmp(buf, "Help", 4)) //Changed here for sending emergency services
+		{
+			sendHelp(clientSocket);
 		}
 		else send(clientSocket, 0 , 0, 0);
 
