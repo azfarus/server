@@ -252,7 +252,7 @@ void sendHelp(SOCKET sock)
 
 
 }
-void sendFaculty(SOCKET sock)
+void sendHelp_vect(SOCKET sock)
 {
 	FILE* fp = fopen(emergencylist, "r+");
 	EmergencyServices service;

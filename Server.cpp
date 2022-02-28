@@ -69,9 +69,9 @@ void main()
 		{
 			searchFaculty(clientSocket);
 		}
-		else if (!strncmp(buf, "Help", 4)) //Changed here for sending emergency services
+		else if (!strncmp(buf, "help", 4)) //Changed here for sending emergency services
 		{
-			sendHelp(clientSocket);
+			sendHelp_vect(clientSocket);
 		}
 		else send(clientSocket, 0 , 0, 0);
 

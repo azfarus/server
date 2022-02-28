@@ -37,5 +37,6 @@ void sendFaculty(SOCKET sock);
 bool facultyDeptComp(info a, info b);
 void searchFaculty(SOCKET sock);
 void sendHelp(SOCKET sock);
+void sendHelp_vect(SOCKET sock);
 int facultyNameComp(char* match, const char* toMatch);
 vector<string> substringer(char* str);
