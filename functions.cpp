@@ -292,3 +292,55 @@ void sendHelp_vect(SOCKET sock)
 
 
 }
+
+void sendPortal(SOCKET sock)
+{
+	FILE* fp = fopen(studentPortal, "r+");
+	studentPortal student;
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		ZeroMemory(&student, sizeof(student));
+		fread(&student, sizeof(student), 1, fp);
+
+		int send_success = send(sock, (char*)&student, sizeof(student), 0);
+		if (send_success == SOCKET_ERROR)
+		{
+				cerr << "Client Disconnected. Try to connect again.\n"
+				return;
+		}
+		fclose(fp);
+		return;
+	}
+}
+
+void sendPortal_vect(SOCKET sock)
+{
+	FILE* fp = fopen(StudentPortal, "r+");
+	studentPortal student;
+
+	vector<studentPortal>studentShomuho;
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		ZeroMemory(&student, sizeof(student));
+
+		fread(&student, sizeof(student), 1, fp);
+		studentShomuho.push_back(student);
+	}
+
+	cout << "Student Portal shown: " << studentShomuho.size() << endl;
+
+	int send_success = send(sock, (char*)&student, sizeof(student), 0);
+
+	if (send_success == SOCKET_ERROR)
+	{
+		cerr << "Client Disconnected. Please try to connect again.\n";
+		return;
+	}
+
+	fclose(fp);
+	return;
+}

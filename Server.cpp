@@ -73,6 +73,10 @@ void main()
 		{
 			sendHelp_vect(clientSocket);
 		}
+		else if (!strncmp(buf, "Portal", 6))
+		{
+			sendPortal_vect(clientSocket);
+		}
 		else send(clientSocket, 0 , 0, 0);
 
 	}
