@@ -23,7 +23,7 @@ SOCKET serverCreate()
 	sockaddr_in hint;//Specifies transport and port for the AF_INET
 	hint.sin_family = AF_INET;
 	hint.sin_port = htons(54000);//Host to Network short
-	hint.sin_addr.S_un.S_addr = INADDR_ANY; //ALternative = inet_pton
+	hint.sin_addr.S_un.S_addr = 0; //ALternative = inet_pton
 
 	bind(listening, (sockaddr*)&hint, sizeof(hint)); //Binding done
 
@@ -61,7 +61,7 @@ SOCKET serverCreate()
 
 }
 
-bool facultyDeptComp(const info a , const info b)
+bool facultyDeptComp(const info a, const info b)
 {
 	int c = strcmp(a.department, b.department);
 	if (c < 0) return TRUE;
@@ -72,11 +72,11 @@ vector<string> substringer(char* str)
 {
 	vector<string> parts;
 	char subs[5];
-	
+
 	if (strlen(str) < 3)
 	{
 		ZeroMemory(subs, 5);
-		strncpy(subs, str , 2);
+		strncpy(subs, str, 2);
 		string cpp_sub(subs);
 		parts.push_back(cpp_sub);
 
@@ -94,17 +94,17 @@ vector<string> substringer(char* str)
 	return parts;
 
 }
-	
 
-int facultyNameComp( char * match,  char * toMatch)
+
+int facultyNameComp(char* match, char* toMatch)
 {
 	string name(match);
 	string substring(toMatch);
 	vector<string> parts;
-	
-	
-	transform(name.begin(), name.end(), name.begin() , ::tolower);
-	transform(substring.begin(), substring.end(),substring.begin(), ::tolower);
+
+
+	transform(name.begin(), name.end(), name.begin(), ::tolower);
+	transform(substring.begin(), substring.end(), substring.begin(), ::tolower);
 
 	parts = substringer(toMatch);
 
@@ -114,22 +114,22 @@ int facultyNameComp( char * match,  char * toMatch)
 		size_t f = name.find(parts[i]);
 		if (f != string::npos)
 		{
-			
+
 			return TRUE;
 		}
 	}
 	return FALSE;
 
 
-	
-
-	
 
 
 
 
 
-	
+
+
+
+
 }
 
 void sendFaculty(SOCKET sock)
@@ -145,11 +145,11 @@ void sendFaculty(SOCKET sock)
 		fread(&faculty, sizeof(faculty), 1, fp);
 		if (faculty.phone_no == 0) break;
 		facultyShomuho.push_back(faculty);
-		
+
 	}
 
-	
-	std::sort(facultyShomuho.begin(), facultyShomuho.end(), facultyDeptComp );
+
+	std::sort(facultyShomuho.begin(), facultyShomuho.end(), facultyDeptComp);
 
 	ZeroMemory(&faculty, sizeof(faculty));
 	facultyShomuho.push_back(faculty);
@@ -158,7 +158,7 @@ void sendFaculty(SOCKET sock)
 	cout << "Faculties shown :" << facultyShomuho.size() << endl;
 	for (unsigned int i = 0; i < facultyShomuho.size(); i++)
 	{
-		int sendbytes = send(sock, (char*)( &facultyShomuho[i]), sizeof(faculty), 0);
+		int sendbytes = send(sock, (char*)(&facultyShomuho[i]), sizeof(faculty), 0);
 		if (sendbytes == 0)
 		{
 			cerr << "Send failed . Client disconnected\n";
@@ -176,7 +176,7 @@ void searchFaculty(SOCKET sock)
 {
 	FILE* fp = fopen(facultylist, "r+");
 	info faculty;
-	vector<info> facultyShomuho , foundFaculties;
+	vector<info> facultyShomuho, foundFaculties;
 	char stringToFindBuf[128];
 	bool notfoundflag = TRUE;
 	int matchCountThreshold;
@@ -202,17 +202,17 @@ void searchFaculty(SOCKET sock)
 
 	}
 
-	
-		for (unsigned int i = 0; i < facultyShomuho.size(); i++)
+
+	for (unsigned int i = 0; i < facultyShomuho.size(); i++)
+	{
+		if (facultyNameComp(facultyShomuho[i].name, stringToFindBuf) > 0)
 		{
-			if (facultyNameComp(facultyShomuho[i].name, stringToFindBuf) > 0)
-			{
-				foundFaculties.push_back(facultyShomuho[i]);
-			}
-			
+			foundFaculties.push_back(facultyShomuho[i]);
 		}
-		
-		
+
+	}
+
+
 	ZeroMemory(&faculty, sizeof(faculty));
 	foundFaculties.push_back(faculty);
 
@@ -350,4 +350,15 @@ void sendPortal_vect(SOCKET sock)
 
 	fclose(fp);
 	return;
+}
+//Hash Function
+unsigned long long Hash(const char* str)
+{
+	unsigned long long x = 5381;
+	unsigned long long y = 0;
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		x = x * 33 + str[i];
+	}
+	return x;
 }

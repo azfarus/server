@@ -20,7 +20,7 @@ using namespace std;
 typedef struct _Info
 {
 	char name[50], address[100], department[10];
-	unsigned long long int phone_no ;
+	unsigned long long int phone_no;
 	int flag;
 
 
@@ -34,6 +34,7 @@ typedef struct _emergency {
 
 //Struct for student portal
 typedef struct _student {
+	unsigned long long hash;
 	unsigned long long roll;
 	char name[100], email[50], father[100], mother[100], dept[4];
 	double CG;
@@ -51,3 +52,5 @@ vector<string> substringer(char* str);
 //New Functions
 void sendPortal(SOCKET sock);
 void sendPortal_vect(SOCKET sock);
+
+unsigned long long Hash(const char* str);

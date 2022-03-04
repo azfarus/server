@@ -1,6 +1,6 @@
 #include <iostream>
 #include <WS2tcpip.h> //Contains definitions introduced in winsock 2 and functions to receive IPs
-					 //Also access network sockets
+//Also access network sockets
 
 #include <string>
 #include "ServerUtils.h"
@@ -27,13 +27,13 @@ void main()
 	}
 
 	// Create a socket
-	
+
 	SOCKET clientSocket = serverCreate();
 
 
 
 
-	
+
 	//Features handling loop//
 	char buf[4096];
 
@@ -49,7 +49,7 @@ void main()
 
 			clientSocket = serverCreate();
 			continue;
-			
+
 		}
 
 		if (bytesReceived == 0)
@@ -58,7 +58,7 @@ void main()
 
 			clientSocket = serverCreate();
 			continue;
-			
+
 		}
 
 		if (!strncmp(buf, "faculty", 6))
@@ -77,7 +77,7 @@ void main()
 		{
 			sendPortal_vect(clientSocket);
 		}
-		else send(clientSocket, 0 , 0, 0);
+		else send(clientSocket, 0, 0, 0);
 
 	}
 
