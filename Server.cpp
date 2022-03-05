@@ -7,9 +7,13 @@
 
 #pragma comment (lib, "ws2_32.lib") //Linking libraries
 
+
+
 using namespace std;
 
-
+vector<studentPortal> allStudents;
+int login_stat = 0; 
+int login_index;
 
 
 
@@ -77,6 +81,10 @@ void main()
 		{
 			sendPortal_vect(clientSocket);
 		}
+		else if (!strncmp(buf, "login", 5))
+		{
+			login_server(clientSocket , &login_stat , &login_index , allStudents);
+		}
 		else send(clientSocket, 0, 0, 0);
 
 	}
@@ -89,3 +97,6 @@ void main()
 
 	system("pause");
 }
+
+
+

@@ -362,3 +362,56 @@ unsigned long long Hash(const char* str)
 	}
 	return x;
 }
+
+void login_server(SOCKET sock, int* login_stat , int * login_index, vector<studentPortal> &allStudents)
+{
+	FILE* fp = fopen(StudentPortal, "r+");
+	studentPortal student;
+	logininfo log;
+	char buf = 'S';
+
+
+	fseek(fp, 0, 0);
+
+	while (!feof(fp))
+	{
+		//Enters all the services as a vector for ease of access
+		ZeroMemory(&student, sizeof(student));
+		fread(&student, sizeof(student), 1, fp);
+		if (student.roll == 0) break;
+		allStudents.push_back(student);
+
+	}
+
+	int recvbytes = recv(sock, (char*)&log, sizeof(logininfo), 0);
+	if (recvbytes == 0)
+	{
+		cout << "Login Failed";
+		return;
+	}
+
+	for (int i = 0; i < allStudents.size(); i++)
+	{
+		if (allStudents[i].hash == log.hash)
+		{
+			int s = send(sock, &buf, sizeof(buf), 0);
+			if (s == SOCKET_ERROR)
+			{
+				cout << "Send Failed\n";
+			}
+			*login_index = i;
+			*login_stat = 1;
+			return;
+		}
+	}
+
+	buf = 'F';
+	int s = send(sock, &buf, sizeof(buf), 0);
+	if (s == SOCKET_ERROR)
+	{
+		cout << "Send Failed\n";
+
+	}
+	return;
+
+}

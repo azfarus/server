@@ -9,9 +9,9 @@
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-#define facultylist "E:\\ProjectDataBase\\FACULTY.txt" 
-#define emergencylist "E:\\ProjectDataBase\\EmergencyServices.txt"
-#define StudentPortal "E:\\ProjectDataBase\\StudentPortal.txt"
+#define facultylist "H:\\ProjectDataBase\\FACULTY.txt" 
+#define emergencylist "H:\\ProjectDataBase\\EmergencyServices.txt"
+#define StudentPortal "H:\\ProjectDataBase\\StudentPortal.txt"
 
 #pragma comment (lib, "ws2_32.lib")
 
@@ -40,6 +40,13 @@ typedef struct _student {
 	double CG;
 }studentPortal;
 
+typedef struct _logininfo
+{
+	unsigned long long id;
+	unsigned long long hash;
+}logininfo;
+
+
 SOCKET serverCreate();
 void sendFaculty(SOCKET sock);
 bool facultyDeptComp(info a, info b);
@@ -47,10 +54,13 @@ void searchFaculty(SOCKET sock);
 void sendHelp(SOCKET sock);
 void sendHelp_vect(SOCKET sock);
 int facultyNameComp(char* match, const char* toMatch);
+
 vector<string> substringer(char* str);
 
 //New Functions
 void sendPortal(SOCKET sock);
 void sendPortal_vect(SOCKET sock);
+
+void login_server(SOCKET sock, int* login_stat, int* login_index, vector<studentPortal>& allStudents);
 
 unsigned long long Hash(const char* str);
