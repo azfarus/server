@@ -354,11 +354,12 @@ void sendPortal_vect(SOCKET sock)
 //Hash Function
 unsigned long long Hash(const char* str)
 {
-	unsigned long long x = 5381;
-	unsigned long long y = 0;
+	unsigned long long x = 0;
+
 	for (int i = 0; str[i] != '\0'; i++)
 	{
-		x = x * 33 + str[i];
+		x = str[i] + (x << 6) + (x << 16) - x; //or multiplying by 65599
+		//SDBM hash
 	}
 	return x;
 }
@@ -413,5 +414,43 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 
 	}
 	return;
+
+}
+void buyTickets(SOCKET sock, int* login_index)
+{
+	char buff;
+	int bytesRecv = recv(sock, &buff, sizeof(buff), 0);
+
+	if (bytesRecv == 0)
+	{
+		cerr << "Error buying tickets\n";
+		return;
+	}
+	
+	if (buff == 'L')
+	{
+		vector<studentPortal> allStudents;
+		FILE* fp = fopen(StudentPortal, "r+");
+		studentPortal student;
+		logininfo log;
+
+
+		fseek(fp, 0, 0);
+
+		while (!feof(fp))
+		{
+			//Enters all the services as a vector for ease of access
+			ZeroMemory(&student, sizeof(student));
+			fread(&student, sizeof(student), 1, fp);
+			if (student.roll == 0) break;
+			allStudents.push_back(student);
+
+		}
+
+		allStudents[*login_index].balance -= 70;
+
+		cout << allStudents[*login_index].balance << endl;
+		
+	}
 
 }

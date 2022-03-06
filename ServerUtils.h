@@ -9,9 +9,9 @@
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-#define facultylist "H:\\ProjectDataBase\\FACULTY.txt" 
-#define emergencylist "H:\\ProjectDataBase\\EmergencyServices.txt"
-#define StudentPortal "H:\\ProjectDataBase\\StudentPortal.txt"
+#define facultylist "E:\\ProjectDataBase\\FACULTY.txt" 
+#define emergencylist "E:\\ProjectDataBase\\EmergencyServices.txt"
+#define StudentPortal "E:\\ProjectDataBase\\StudentPortal.txt"
 
 #pragma comment (lib, "ws2_32.lib")
 
@@ -38,6 +38,7 @@ typedef struct _student {
 	unsigned long long roll;
 	char name[100], email[50], father[100], mother[100], dept[4];
 	double CG;
+	long long int balance;
 }studentPortal;
 
 typedef struct _logininfo
@@ -64,3 +65,6 @@ void sendPortal_vect(SOCKET sock);
 void login_server(SOCKET sock, int* login_stat, int* login_index, vector<studentPortal>& allStudents);
 
 unsigned long long Hash(const char* str);
+void buyTickets(SOCKET sock, int* login_index);
+
+using namespace std;

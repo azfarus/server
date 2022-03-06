@@ -85,6 +85,10 @@ void main()
 		{
 			login_server(clientSocket , &login_stat , &login_index , allStudents);
 		}
+		else if (!strncmp(buf, "cafe", 4))
+		{
+			buyTickets(clientSocket, &login_index);
+		}
 		else send(clientSocket, 0, 0, 0);
 
 	}
