@@ -65,6 +65,8 @@ void sendPortal_vect(SOCKET sock);
 void login_server(SOCKET sock, int* login_stat, int* login_index, vector<studentPortal>& allStudents);
 
 unsigned long long Hash(const char* str);
-void buyTickets(SOCKET sock, int* login_index);
+void buyTickets(SOCKET sock, int* login_index, vector<studentPortal>&allStudents);
+
+void rePrint(vector<studentPortal> &allStudents);
 
 using namespace std;

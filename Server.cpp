@@ -87,7 +87,7 @@ void main()
 		}
 		else if (!strncmp(buf, "cafe", 4))
 		{
-			buyTickets(clientSocket, &login_index);
+			buyTickets(clientSocket, &login_index,  allStudents);
 		}
 		else send(clientSocket, 0, 0, 0);
 

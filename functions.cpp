@@ -383,7 +383,8 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 		allStudents.push_back(student);
 
 	}
-
+	ZeroMemory(&student, sizeof(student));
+	allStudents.push_back(student);
 	int recvbytes = recv(sock, (char*)&log, sizeof(logininfo), 0);
 	if (recvbytes == 0)
 	{
@@ -416,7 +417,7 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 	return;
 
 }
-void buyTickets(SOCKET sock, int* login_index)
+void buyTickets(SOCKET sock, int* login_index, vector<studentPortal> &allStudents)
 {
 	char buff;
 	int bytesRecv = recv(sock, &buff, sizeof(buff), 0);
@@ -429,28 +430,49 @@ void buyTickets(SOCKET sock, int* login_index)
 	
 	if (buff == 'L')
 	{
-		vector<studentPortal> allStudents;
-		FILE* fp = fopen(StudentPortal, "r+");
-		studentPortal student;
-		logininfo log;
+		//vector<studentPortal> allStudents;
+		//FILE* fp = fopen(StudentPortal, "r+");
+		//studentPortal student;
+		//logininfo log;
 
 
-		fseek(fp, 0, 0);
+		//fseek(fp, 0, 0);
 
-		while (!feof(fp))
-		{
-			//Enters all the services as a vector for ease of access
-			ZeroMemory(&student, sizeof(student));
-			fread(&student, sizeof(student), 1, fp);
-			if (student.roll == 0) break;
-			allStudents.push_back(student);
+		//while (!feof(fp))
+		//{
+		//	//Enters all the services as a vector for ease of access
+		//	ZeroMemory(&student, sizeof(student));
+		//	fread(&student, sizeof(student), 1, fp);
+		//	if (student.roll == 0) break;
+		//	allStudents.push_back(student);
 
-		}
+		//}
 
 		allStudents[*login_index].balance -= 70;
 
 		cout << allStudents[*login_index].balance << endl;
 		
+		rePrint(allStudents);
+
+		cout << allStudents[*login_index].balance << endl;
 	}
 
+}
+
+void rePrint(vector <studentPortal>& allStudents)
+{
+	remove(StudentPortal);
+	FILE* fp = fopen(StudentPortal, "w");
+
+	studentPortal student;
+	fseek(fp, 0, 0);
+	for (unsigned int i = 0; i < allStudents.size(); i++)
+	{
+		student = allStudents[i];
+
+		fwrite(&student, sizeof(student), 1, fp);
+	}
+
+	fclose(fp);
+	return;
 }
