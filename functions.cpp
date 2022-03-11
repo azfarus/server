@@ -472,3 +472,8 @@ void rePrint(vector <studentPortal>& allStudents)
 	fclose(fp);
 	return;
 }
+
+void admissionQuery(SOCKET sock)
+{
+	
+}

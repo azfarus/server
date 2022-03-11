@@ -69,4 +69,5 @@ void buyTickets(SOCKET sock, int* login_index, vector<studentPortal>&allStudents
 
 void rePrint(vector<studentPortal> &allStudents);
 
+void admissionQuery(SOCKET sock);
 using namespace std;
