@@ -430,27 +430,23 @@ void buyTickets(SOCKET sock, int* login_index, vector<studentPortal> &allStudent
 	
 	if (buff == 'L')
 	{
-		//vector<studentPortal> allStudents;
-		//FILE* fp = fopen(StudentPortal, "r+");
-		//studentPortal student;
-		//logininfo log;
-
-
-		//fseek(fp, 0, 0);
-
-		//while (!feof(fp))
-		//{
-		//	//Enters all the services as a vector for ease of access
-		//	ZeroMemory(&student, sizeof(student));
-		//	fread(&student, sizeof(student), 1, fp);
-		//	if (student.roll == 0) break;
-		//	allStudents.push_back(student);
-
-		//}
+		cout << allStudents[*login_index].balance << endl;
 
 		allStudents[*login_index].balance -= 70;
 
+		
+		
+		rePrint(allStudents);
+
 		cout << allStudents[*login_index].balance << endl;
+	}
+
+	else if (buff == 'S')
+	{
+		cout << allStudents[*login_index].balance << endl;
+
+		allStudents[*login_index].balance -= 80;
+
 		
 		rePrint(allStudents);
 
