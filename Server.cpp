@@ -89,6 +89,10 @@ void main()
 		{
 			buyTickets(clientSocket, &login_index,  allStudents);
 		}
+		else if (!strncmp(buf, "chat", 4))
+		{
+			chat(clientSocket);
+		}
 		else send(clientSocket, 0, 0, 0);
 
 	}

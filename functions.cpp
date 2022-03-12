@@ -494,3 +494,20 @@ void rePrint(vector <studentPortal>& allStudents)
 	fclose(fp);
 	return;
 }
+
+void chat(SOCKET sock)
+{
+	system("cls");
+	string buff;
+	do {
+		recv(sock, (char*)&buff, sizeof(buff), 0);
+
+		cout << "Client >> ";
+		cout << buff << endl;
+
+		cout << "Server >> ";
+		getline(cin, buff);
+		send(sock, (char*)&buff, sizeof(buff), 0);
+
+	} while (strncmp((char*)&buff, "Bye", 3) != 0);
+}
