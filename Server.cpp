@@ -89,10 +89,6 @@ void main()
 		{
 			buyTickets(clientSocket, &login_index,  allStudents);
 		}
-		else if (!strncmp(buf, "admission", 9))
-		{
-			admissionQuery(clientSocket);
-		}
 		else send(clientSocket, 0, 0, 0);
 
 	}

@@ -430,27 +430,49 @@ void buyTickets(SOCKET sock, int* login_index, vector<studentPortal> &allStudent
 	
 	if (buff == 'L')
 	{
-		cout << allStudents[*login_index].balance << endl;
+		if (allStudents[*login_index].balance - 70 >= 0)
+		{
+			cout << allStudents[*login_index].balance << endl;
 
-		allStudents[*login_index].balance -= 70;
+			allStudents[*login_index].balance -= 70;
 
+
+
+			rePrint(allStudents);
+			char response = 'Y';
+			send(sock, &response, sizeof(response), 0);
+
+			cout << allStudents[*login_index].balance << endl;
+		}
+		else
+		{
+			char response = 'N';
+			send(sock, &response, sizeof(response), 0);
+		}
 		
-		
-		rePrint(allStudents);
-
-		cout << allStudents[*login_index].balance << endl;
 	}
 
 	else if (buff == 'S')
 	{
-		cout << allStudents[*login_index].balance << endl;
+		if (allStudents[*login_index].balance - 80 >= 0)
+		{
+			cout << allStudents[*login_index].balance << endl;
 
-		allStudents[*login_index].balance -= 80;
+			allStudents[*login_index].balance -= 80;
 
-		
-		rePrint(allStudents);
 
-		cout << allStudents[*login_index].balance << endl;
+
+			rePrint(allStudents);
+			char response = 'Y';
+			send(sock, &response, sizeof(response), 0);
+
+			cout << allStudents[*login_index].balance << endl;
+		}
+		else
+		{
+			char response = 'N';
+			send(sock, &response, sizeof(response), 0);
+		}
 	}
 
 }
@@ -471,9 +493,4 @@ void rePrint(vector <studentPortal>& allStudents)
 
 	fclose(fp);
 	return;
-}
-
-void admissionQuery(SOCKET sock)
-{
-	
 }
