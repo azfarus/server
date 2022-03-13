@@ -505,6 +505,15 @@ void chat(SOCKET sock)
 	while (true)
 	{
 		recv(sock, (char*)&buff, sizeof(buff), 0);
+
+		if (!strncmp(buff, "bye", 3))
+		{
+			cerr << "User has terminated the chat!" << endl;
+			cout << "Press any key to clear screen.\n";
+			getchar();
+			system("cls");
+			return;
+		}
 		cout << "Client >> ";
 		cout << buff << endl;
 
