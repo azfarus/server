@@ -498,16 +498,20 @@ void rePrint(vector <studentPortal>& allStudents)
 void chat(SOCKET sock)
 {
 	system("cls");
-	string buff;
-	do {
-		recv(sock, (char*)&buff, sizeof(buff), 0);
 
+
+	char buff[500];
+
+	while (true)
+	{
+		recv(sock, (char*)&buff, sizeof(buff), 0);
 		cout << "Client >> ";
 		cout << buff << endl;
 
 		cout << "Server >> ";
-		getline(cin, buff);
+		cin.getline(buff, sizeof(buff));
 		send(sock, (char*)&buff, sizeof(buff), 0);
+	}
 
-	} while (strncmp((char*)&buff, "Bye", 3) != 0);
+	return;
 }
