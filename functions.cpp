@@ -504,13 +504,13 @@ void chat(SOCKET sock)
 
 	while (true)
 	{
-		recv(sock, (char*)&buff, sizeof(buff), 0);
+		int recv_success = recv(sock, (char*)&buff, sizeof(buff), 0);
 
-		if (!strncmp(buff, "bye", 3))
+		if (!strncmp(buff, ":bye:", 5)|| recv_success<=0)
 		{
 			cerr << "User has terminated the chat!" << endl;
-			cout << "Press any key to clear screen.\n";
-			getchar();
+			cout << "Resetting in 5 seconds\n";
+			Sleep(5000);
 			system("cls");
 			return;
 		}
@@ -520,6 +520,7 @@ void chat(SOCKET sock)
 		cout << "Server >> ";
 		cin.getline(buff, sizeof(buff));
 		send(sock, (char*)&buff, sizeof(buff), 0);
+		ZeroMemory(buff, sizeof(buff));
 	}
 
 	return;
