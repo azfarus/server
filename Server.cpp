@@ -1,44 +1,38 @@
 #include <iostream>
-#include <WS2tcpip.h> //Contains definitions introduced in winsock 2 and functions to receive IPs
-//Also access network sockets
-
+#include <WS2tcpip.h>
 #include <string>
 #include "ServerUtils.h"
 
-#pragma comment (lib, "ws2_32.lib") //Linking libraries
-
-
+#pragma comment (lib, "ws2_32.lib")
 
 using namespace std;
 
-vector<studentPortal> allStudents;
-int login_stat = 0; 
-int login_index;
+
 
 
 
 void main()
 {
-	//initialize Winsock
-	WSADATA wsData; //Contains information about the windows sockets implementation
-	WORD ver = MAKEWORD(2, 2); //The MAKEWORD(2,2) parameter of WSAStartup makes a request for
-							   //version 2.2 of Winsock on the system, and sets the passed version as the highest version of Windows Sockets support that the caller can use
-	int wsok = WSAStartup(ver, &wsData); //allows an application or DLL to specify the version of Windows Sockets required and retrieve details of the specific Windows Sockets implementation
-	if (wsok != 0)
+	// Initialze winsock
+	WSADATA wsData;
+	WORD ver = MAKEWORD(2, 2);
+
+	int wsOk = WSAStartup(ver, &wsData);
+	if (wsOk != 0)
 	{
 		cerr << "Can't Initialize winsock! Quitting" << endl;
 		return;
 	}
 
 	// Create a socket
-
+	
 	SOCKET clientSocket = serverCreate();
 
 
 
 
+	info siuuu;
 
-	//Features handling loop//
 	char buf[4096];
 
 	while (true)
@@ -53,7 +47,7 @@ void main()
 
 			clientSocket = serverCreate();
 			continue;
-
+			
 		}
 
 		if (bytesReceived == 0)
@@ -62,38 +56,15 @@ void main()
 
 			clientSocket = serverCreate();
 			continue;
-
+			
 		}
 
-		if (!strncmp(buf, "faculty", 6))
+		if (!strncmp(buf, "NAMDAO", 6))
 		{
+			//send(clientSocket,(char *)&siuuu,sizeof(siuuu), 0);
 			sendFaculty(clientSocket);
 		}
-		else if (!strncmp(buf, "searchfaculty", 13))
-		{
-			searchFaculty(clientSocket);
-		}
-		else if (!strncmp(buf, "help", 4)) //Changed here for sending emergency services
-		{
-			sendHelp_vect(clientSocket);
-		}
-		else if (!strncmp(buf, "Portal", 6))
-		{
-			sendPortal_vect(clientSocket);
-		}
-		else if (!strncmp(buf, "login", 5))
-		{
-			login_server(clientSocket , &login_stat , &login_index , allStudents);
-		}
-		else if (!strncmp(buf, "cafe", 4))
-		{
-			buyTickets(clientSocket, &login_index,  allStudents);
-		}
-		else if (!strncmp(buf, "chat", 4))
-		{
-			chat(clientSocket);
-		}
-		else send(clientSocket, 0, 0, 0);
+		else send(clientSocket, buf, bytesReceived + 1, 0);
 
 	}
 
@@ -105,6 +76,3 @@ void main()
 
 	system("pause");
 }
-
-
-
