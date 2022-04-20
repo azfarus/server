@@ -498,6 +498,8 @@ void rePrint(vector <studentPortal>& allStudents)
 
 		fwrite(&student, sizeof(student), 1, fp);
 	}
+	ZeroMemory(&student, sizeof(student));
+	fwrite(&student, sizeof(student), 1, fp);
 
 	fclose(fp);
 	return;
