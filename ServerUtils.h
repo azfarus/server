@@ -9,9 +9,9 @@
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-#define facultylist "F:\\ProjectDataBase\\FACULTY.txt" 
-#define emergencylist "F:\\ProjectDataBase\\EmergencyServices.txt"
-#define StudentPortal "F:\\ProjectDataBase\\StudentPortal.txt"
+#define facultylist "E:\\ProjectDataBase\\FACULTY.txt" 
+#define emergencylist "E:\\ProjectDataBase\\EmergencyServices.txt"
+#define StudentPortal "E:\\ProjectDataBase\\StudentPortal.txt"
 
 #pragma comment (lib, "ws2_32.lib")
 

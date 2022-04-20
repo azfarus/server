@@ -373,12 +373,13 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 
 
 	fseek(fp, 0, 0);
-
+	allStudents.clear();
 	while (!feof(fp))
 	{
 		//Enters all the services as a vector for ease of access
 		ZeroMemory(&student, sizeof(student));
 		fread(&student, sizeof(student), 1, fp);
+		std::cout << student.name << "   >> "<<feof(fp)<<std::endl;
 		if (student.roll == 0) break;
 		allStudents.push_back(student);
 
