@@ -510,7 +510,7 @@ void chat(SOCKET sock)
 	system("cls");
 
 
-	char buff[500], buffT[1000];
+	char buff[2000];
 
 	while (true)
 	{
@@ -528,8 +528,9 @@ void chat(SOCKET sock)
 		cout << buff << endl;
 		fflush(stdin);
 		cout << "Server >> ";
-		ZeroMemory(buff, 500);
+		ZeroMemory(buff, 2000);
 		cin.getline(buff, sizeof(buff));
+		
 		send(sock, (char*)&buff, sizeof(buff), 0);
 	}
 
