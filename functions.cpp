@@ -317,38 +317,38 @@ void sendPortal(SOCKET sock)
 
 void sendPortal_vect(SOCKET sock)
 {
-	FILE* fp = fopen(StudentPortal, "r+");
-	studentPortal student;
+	//FILE* fp = fopen(StudentPortal, "r+");
+	//studentPortal student;
 
-	vector<studentPortal>studentShomuho;
-	fseek(fp, 0, 0);
+	//vector<studentPortal>studentShomuho;
+	//fseek(fp, 0, 0);
 
-	while (!feof(fp))
-	{
-		//Enters all the services as a vector for ease of access
-		ZeroMemory(&student, sizeof(student));
-		fread(&student, sizeof(student), 1, fp);
-		if (student.roll == 0) break;
-		studentShomuho.push_back(student);
+	//while (!feof(fp))
+	//{
+	//	//Enters all the services as a vector for ease of access
+	//	ZeroMemory(&student, sizeof(student));
+	//	fread(&student, sizeof(student), 1, fp);
+	//	if (student.roll == 0) break;
+	//	studentShomuho.push_back(student);
 
-	}
-	ZeroMemory(&student, sizeof(student));
-	studentShomuho.push_back(student);
-	//Vector manipulation done//
+	//}
+	//ZeroMemory(&student, sizeof(student));
+	//studentShomuho.push_back(student);
+	////Vector manipulation done//
 
-	//Server console outputs:
-	cout << "Portals shown: " << studentShomuho.size() << endl;
-	for (unsigned int i = 0; i < studentShomuho.size(); i++)
-	{
-		int sendbytes = send(sock, (char*)(&studentShomuho[i]), sizeof(student), 0);
-		if (sendbytes == 0)
-		{
-			cerr << "Send failed . Client disconnected\n";
-			return;
-		}
-	}
+	////Server console outputs:
+	//cout << "Portals shown: " << studentShomuho.size() << endl;
+	//for (unsigned int i = 0; i < studentShomuho.size(); i++)
+	//{
+	//	int sendbytes = send(sock, (char*)(&studentShomuho[i]), sizeof(student), 0);
+	//	if (sendbytes == 0)
+	//	{
+	//		cerr << "Send failed . Client disconnected\n";
+	//		return;
+	//	}
+	//}
 
-	fclose(fp);
+	//fclose(fp);
 	return;
 }
 //Hash Function
@@ -373,12 +373,13 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 
 
 	fseek(fp, 0, 0);
-
+	allStudents.clear();
 	while (!feof(fp))
 	{
 		//Enters all the services as a vector for ease of access
 		ZeroMemory(&student, sizeof(student));
 		fread(&student, sizeof(student), 1, fp);
+		std::cout << student.name << "   >> "<<feof(fp)<<std::endl;
 		if (student.roll == 0) break;
 		allStudents.push_back(student);
 
@@ -394,10 +395,17 @@ void login_server(SOCKET sock, int* login_stat , int * login_index, vector<stude
 
 	for (int i = 0; i < allStudents.size(); i++)
 	{
-		if (allStudents[i].hash == log.hash)
+		if (allStudents[i].hash == log.hash && allStudents[i].roll == log.id)
 		{
+			studentPortal loggedStud;
+			loggedStud = allStudents[i];
 			int s = send(sock, &buf, sizeof(buf), 0);
 			if (s == SOCKET_ERROR)
+			{
+				cout << "Send Failed\n";
+			}
+			int s2 = send(sock, (char *)&loggedStud, sizeof(studentPortal), 0);
+			if (s2 == SOCKET_ERROR)
 			{
 				cout << "Send Failed\n";
 			}
@@ -490,6 +498,8 @@ void rePrint(vector <studentPortal>& allStudents)
 
 		fwrite(&student, sizeof(student), 1, fp);
 	}
+	ZeroMemory(&student, sizeof(student));
+	fwrite(&student, sizeof(student), 1, fp);
 
 	fclose(fp);
 	return;
@@ -500,7 +510,7 @@ void chat(SOCKET sock)
 	system("cls");
 
 
-	char buff[500];
+	char buff[2000];
 
 	while (true)
 	{
@@ -516,9 +526,11 @@ void chat(SOCKET sock)
 		}
 		cout << "Client >> ";
 		cout << buff << endl;
-
+		fflush(stdin);
 		cout << "Server >> ";
+		ZeroMemory(buff, 2000);
 		cin.getline(buff, sizeof(buff));
+		
 		send(sock, (char*)&buff, sizeof(buff), 0);
 	}
 
